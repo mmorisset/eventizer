@@ -7,6 +7,8 @@ gem 'rails', '3.2.0'
 
 
 gem 'mongoid'
+gem 'rails_admin'
+gem 'thin'
 
 
 # Gems used only for assets and not required
@@ -37,3 +39,6 @@ gem 'jquery-rails'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
+
+
+gem "devise"
