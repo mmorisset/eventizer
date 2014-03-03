@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title Arsdp
+    = stylesheet_link_tag "application"
+    = javascript_include_tag "application"
+  body
+  .container
+    .row
+      header
+       h1 Eventizer
+      hr
+    -if notice
+      p.alert.alert-success= notice
+    - if alert
+      p.alert.alert-error= alert
+
+    .inset = yield
+    .row
+      hr
+      footer
+        p All right reserved
