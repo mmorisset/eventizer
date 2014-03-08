@@ -12,6 +12,7 @@ gem 'thin'
 gem 'jquery-rails'
 gem "zeus"
 gem "slim"
+gem "slim-rails"
 gem 'devise'
 
 
