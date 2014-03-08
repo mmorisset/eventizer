@@ -4,12 +4,14 @@ class User
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable,
+         :token_authenticatable
 
   ## Database authenticatable
+  field :name,               :type => String, :default => ""
   field :email,              :type => String, :default => ""
   field :encrypted_password, :type => String, :default => ""
-  
+
   ## Recoverable
   field :reset_password_token,   :type => String
   field :reset_password_sent_at, :type => Time
@@ -36,5 +38,14 @@ class User
   # field :locked_at,       :type => Time
 
   ## Token authenticatable
-  # field :authentication_token, :type => String
+  field :authentication_token, :type => String
+
+  validates_presence_of   :email
+  validates_uniqueness_of :email, :allow_blank => true, :if => :email_changed?
+  validates_format_of     :email, :with  => /\A[^@]+@[^@]+\z/, :allow_blank => true, :if => :email_changed?
+
+  validates_presence_of     :password, if: ->{ !persisted? || !password.nil? || !password_confirmation.nil? }
+  validates_confirmation_of :password, if: ->{ !persisted? || !password.nil? || !password_confirmation.nil? }
+  validates_length_of       :password, :within => 6..128, :allow_blank => true
+  validates_presence_of :encrypted_password
 end
