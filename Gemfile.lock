@@ -94,9 +94,6 @@ GEM
     guard-rspec (3.1.0)
       guard (>= 1.8)
       rspec (~> 2.13)
-    guard-zeus (1.0.0)
-      guard (~> 1.0)
-      zeus (~> 0)
     haml (4.0.5)
       tilt
     hike (1.2.3)
@@ -283,7 +280,6 @@ DEPENDENCIES
   guard-bundler
   guard-cucumber
   guard-rspec
-  guard-zeus
   jquery-rails
   less-rails
   mongoid

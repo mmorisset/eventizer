@@ -31,7 +31,6 @@ group :test, :development do
   gem 'guard-rspec'
   gem 'guard-cucumber'
   gem 'guard-bundler'
-  gem 'guard-zeus'
 end
 
 group :development do
