@@ -1,0 +1,9 @@
+= form_for @mongo_event do |f|
+  - if @mongo_event.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@mongo_event.errors.count, "error")} prohibited this mongo_event from being saved:"
+      ul
+        - @mongo_event.errors.full_messages.each do |message|
+          li = message
+
+  .actions = f.submit 'Save'

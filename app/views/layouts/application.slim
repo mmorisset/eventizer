@@ -1,22 +1,28 @@
 doctype html
-html
+html lang="en"
   head
-    title Arsdp
-    = stylesheet_link_tag "application"
+    meta charset="utf-8"
+    meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    title= content_for?(:title) ? yield(:title) : "Eventizer"
+    = csrf_meta_tags
+    = stylesheet_link_tag "application", :media => "all"
+    = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
     = javascript_include_tag "application"
-  body
-  .container
-    .row
-      header
-       h1 Eventizer
-      hr
-    -if notice
-      p.alert.alert-success= notice
-    - if alert
-      p.alert.alert-error= alert
 
-    .inset = yield
-    .row
-      hr
-      footer
-        p All right reserved
+  body
+    .navbar.navbar-default.navbar-fixed-top role="navigation"
+      .navbar-inner
+        .container-fluid
+          a.btn.btn-navbar data-target=".nav-collapse" data-toggle="collapse"
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.brand href="#"Eventizer
+
+    .container-fluid
+      = bootstrap_flash
+      .row-fluid
+        .span10.offset1
+          = yield
+

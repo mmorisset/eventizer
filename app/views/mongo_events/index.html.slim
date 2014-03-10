@@ -1,0 +1,17 @@
+h1 Listing mongo_events
+
+table
+  tr
+    th
+    th
+    th
+
+  - @mongo_events.each do |mongo_event|
+    tr
+      td = link_to 'Show', mongo_event
+      td = link_to 'Edit', edit_mongo_event_path(mongo_event)
+      td = link_to 'Destroy', mongo_event, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Mongo event', new_mongo_event_path
