@@ -5,7 +5,7 @@ gem 'rails', '3.2.0'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-
+gem 'json'
 gem 'mongoid'
 gem 'rails_admin'
 gem 'mongoid-audit'
@@ -15,6 +15,8 @@ gem "zeus"
 gem "slim"
 gem "slim-rails"
 gem 'devise'
+gem 'rabl'
+gem 'strong_parameters'
 
 
 # Gems used only for assets and not required
@@ -45,4 +47,5 @@ group :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'factory_girl_rails'
+  gem 'json_spec'
 end

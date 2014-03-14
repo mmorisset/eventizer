@@ -10,4 +10,10 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 RSpec.configure do |config|
   config.include Mongoid::Matchers, type: :model
   config.include FactoryGirl::Syntax::Methods
+
+  config.before :each do
+    Mongoid.purge!
+  end
+  config.before(:all) { DeferredGarbageCollection.start }
+  config.after(:all) { DeferredGarbageCollection.reconsider }
 end

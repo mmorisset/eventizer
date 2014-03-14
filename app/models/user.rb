@@ -1,5 +1,6 @@
 class User
   include Mongoid::Document
+  include MongoidAudit::History
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -48,4 +49,7 @@ class User
   validates_confirmation_of :password, if: ->{ !persisted? || !password.nil? || !password_confirmation.nil? }
   validates_length_of       :password, :within => 6..128, :allow_blank => true
   validates_presence_of :encrypted_password
+
+  has_many :authorizations, inverse_of: :user, dependent: :destroy
+  has_many :mongo_events, inverse_of: :user, dependent: :destroy
 end

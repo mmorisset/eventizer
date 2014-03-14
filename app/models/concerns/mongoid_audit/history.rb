@@ -1,4 +1,4 @@
-module History
+module MongoidAudit::History
   extend ActiveSupport::Concern
 
   included do

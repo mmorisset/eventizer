@@ -7,12 +7,15 @@ describe MongoEvent do
   end
 
   describe "Attributes" do
+    it { should have_field(:serialized_data).of_type(Hash) }
     it { should be_timestamped_document }
+  end
 
   # Custom fields
     # it { should have_field(:name).of_type(String) }
 
-  # describe "Associations" do
+  describe "Associations" do
+    it { should belong_to(:user).as_inverse_of(:mongo_events)}
   end
 
   describe "Validations" do

@@ -8,7 +8,7 @@ guard "cucumber", command_prefix: "zeus", bundler: false do
   watch(%r{^features/step.+/.+$})  { "features" }
 end
 
-guard "rspec", cmd: 'zeus rspec', bundler: false do
+guard :rspec, zeus: true, all_on_start: true, all_after_pass: true, bundler: false do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch("spec/spec_helper.rb")  { "spec" }

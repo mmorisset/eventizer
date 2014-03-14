@@ -30,8 +30,10 @@ describe User do
   # Custom fields
     it { should have_field(:name).of_type(String) }
 
-  # describe "Associations" do
-  # end
+  describe "Associations" do
+    it { should have_many(:authorizations).as_inverse_of(:user) }
+    it { should have_many(:mongo_events).as_inverse_of(:user) }
+  end
 
   describe "Validations" do
     # Devise fields
