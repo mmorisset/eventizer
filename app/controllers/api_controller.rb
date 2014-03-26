@@ -5,14 +5,20 @@ class ApiController < ActionController::Base
   end
 
   respond_to :json
+  self.responder = CustomResponder
 
   before_filter :authenticate_user!
   before_filter :authorize_access!, :except => [:index, :show]
+  before_filter :authenticate_project!
 
   helper_method :current_user
 
   def current_user
     @current_user
+  end
+
+  def current_project
+    @current_project
   end
 
   def current_authorization
@@ -35,7 +41,7 @@ class ApiController < ActionController::Base
   private
 
     def resource_not_found(exception)
-      message = not(Rails.env.audit? || Rails.env.production?) ?
+      message = not(Rails.env.production?) ?
         exception.message.split('Summary:').first.
           gsub("\nProblem:\n  ", '').
           gsub("Document(s) not found for class ", '').
@@ -59,6 +65,13 @@ class ApiController < ActionController::Base
     def authorize_access!
       unless @current_authorization.access == 'write'
         respond_with({ error: "Insufficient access rights: Access denied" }, status: :forbidden, location: nil, template: nil)
+        return false
+      end
+    end
+
+    def authenticate_project!
+      unless @current_project = @current_user.projects.find(params.require(:project_id))
+        respond_with({ error: "Unrecognized User Authorization: Access denied" }, status: :not_found, location: nil, template: nil)
         return false
       end
     end

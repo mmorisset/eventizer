@@ -61,6 +61,17 @@ describe ApiController do
     end
   end
 
+  describe "#current_project" do
+    before do
+      @current_project = create(:project)
+      controller.instance_variable_set :@current_project, @current_project
+    end
+
+    it "should return an instance of the current user" do
+      controller.current_project.should eq @current_project
+    end
+  end
+
   describe '#authenticate_user!' do
     it 'sends back a 400 \'Required parameter missing: secret\' if user secret is missing when requested' do
       get :show
@@ -76,35 +87,64 @@ describe ApiController do
   end
 
   describe '#authorize_access!' do
+    let(:user) { create(:user) }
+    let(:write_authorization) { create(:write_authorization, user: user) }
+    let(:read_authorization) { create(:read_authorization, user: user) }
+
     before do
-      @user = create(:user)
-      @write_authorization = create(:write_authorization, user: @user)
-      @read_authorization  = create(:read_authorization, user: @user)
+      controller.stub(:authenticate_project!) { true }
     end
 
-    it 'let access if the Authorization has no write access' do
-      expect { get :index, { secret: @write_authorization.secret } }.to raise_error 'I am executed'
-      expect { get :show,  { secret: @write_authorization.secret } }.to raise_error 'I am executed'
+    context 'when the authorization has no write access' do
+      it 'allows read access' do
+        expect { get :index,  { secret: write_authorization.secret } }.to raise_error 'I am executed'
+        expect { get :show,   { secret: write_authorization.secret } }.to raise_error 'I am executed'
+      end
+
+      it 'doesn\'t allow write access' do
+        get :create, { secret: read_authorization.secret }
+        response.body.should include "Insufficient access rights: Access denied"
+        response.status.should eq 403
+        get :update, { secret: read_authorization.secret }
+        response.body.should include "Insufficient access rights: Access denied"
+        response.status.should eq 403
+        get :delete, { secret: read_authorization.secret }
+        response.body.should include "Insufficient access rights: Access denied"
+        response.status.should eq 403
+      end
     end
 
-    it 'sends back a 403 if the Authorization has not write access' do
-      get :create, { secret: @read_authorization.secret }
-      response.body.should include "Insufficient access rights: Access denied"
-      response.status.should eq 403
-      get :update, { secret: @read_authorization.secret }
-      response.body.should include "Insufficient access rights: Access denied"
-      response.status.should eq 403
-      get :delete, { secret: @read_authorization.secret }
-      response.body.should include "Insufficient access rights: Access denied"
-      response.status.should eq 403
+    context 'when the authorization has write access' do
+      it 'allows write access' do
+        expect { get :index,  { secret: write_authorization.secret } }.to raise_error 'I am executed'
+        expect { get :show,   { secret: write_authorization.secret } }.to raise_error 'I am executed'
+        expect { get :create, { secret: write_authorization.secret } }.to raise_error 'I am executed'
+        expect { get :update, { secret: write_authorization.secret } }.to raise_error 'I am executed'
+        expect { get :delete, { secret: write_authorization.secret } }.to raise_error 'I am executed'
+      end
+    end
+  end
+
+  describe '#authenticate_project!' do
+
+    let(:user) { create(:user) }
+    let(:project) { create(:project, user: user) }
+
+    before do
+      controller.stub(:authenticate_user!) { true }
+      controller.stub(:authorize_access!) { true }
+      controller.instance_variable_set :@current_user, user
     end
 
-    it 'let access if the Authorization has write access' do
-      expect { get :index,  { secret: @write_authorization.secret } }.to raise_error 'I am executed'
-      expect { get :show,   { secret: @write_authorization.secret } }.to raise_error 'I am executed'
-      expect { get :create, { secret: @write_authorization.secret } }.to raise_error 'I am executed'
-      expect { get :update, { secret: @write_authorization.secret } }.to raise_error 'I am executed'
-      expect { get :delete, { secret: @write_authorization.secret } }.to raise_error 'I am executed'
+    it 'sends back a 400 \'Required parameter missing: project\' if user project is missing when requested' do
+      get :show
+      response.body.should include "Required parameter missing: project"
+      response.status.should eq 400
+    end
+
+    it 'sends back a 404 \'Unrecognized Project: Access denied\' if project cannot be found' do
+      get :show, { project_id: 'invalid-project' }
+      response.status.should eq 404
     end
   end
 end

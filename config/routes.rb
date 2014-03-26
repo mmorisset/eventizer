@@ -10,7 +10,9 @@ Eventizer::Application.routes.draw do
 
   namespace :api, defaults: {format: 'json'} do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
-      resources :mongo_events, only: [:create, :index, :show, :destroy]
+      resources :projects, only: [] do
+        resources :mongo_events, only: [:create, :index, :show, :destroy]
+      end
     end
   end
 
@@ -35,7 +37,7 @@ Eventizer::Application.routes.draw do
   #       post 'toggle'
   #     end
   #
-  #     collection do
+  #     event_collection do
   #       get 'sold'
   #     end
   #   end
@@ -50,7 +52,7 @@ Eventizer::Application.routes.draw do
   #   resources :products do
   #     resources :comments
   #     resources :sales do
-  #       get 'recent', :on => :collection
+  #       get 'recent', :on => :event_collection
   #     end
   #   end
 

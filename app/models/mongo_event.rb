@@ -9,9 +9,11 @@ class MongoEvent
 
   index_name "mongo_events-#{Rails.env}"
 
-  belongs_to :user, inverse_of: :mongo_events
+  belongs_to :event_collection, inverse_of: :mongo_events
 
-  def scaffold params
+  validates_presence_of :event_collection
+
+  def scaffold(params)
     self.data = params[:data]
     self
   end

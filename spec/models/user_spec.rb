@@ -32,7 +32,7 @@ describe User do
 
   describe "Associations" do
     it { should have_many(:authorizations).as_inverse_of(:user) }
-    it { should have_many(:mongo_events).as_inverse_of(:user) }
+    it { should have_many(:projects).as_inverse_of(:user) }
   end
 
   describe "Validations" do

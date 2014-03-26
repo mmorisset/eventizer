@@ -51,5 +51,5 @@ class User
   validates_presence_of :encrypted_password
 
   has_many :authorizations, inverse_of: :user, dependent: :destroy
-  has_many :mongo_events, inverse_of: :user, dependent: :destroy
+  has_many :projects, inverse_of: :user, dependent: :destroy
 end
