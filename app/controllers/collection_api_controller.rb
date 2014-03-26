@@ -1,4 +1,4 @@
-class ApiController < ActionController::Base
+class CollectionApiController < ActionController::Base
   include ActionController::MimeResponds
   before_filter do
     request.format = "json"

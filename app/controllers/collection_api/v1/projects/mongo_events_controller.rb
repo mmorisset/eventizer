@@ -1,6 +1,6 @@
-module Api
+module CollectionApi
   module V1
-    class MongoEventsController < ApiController
+    class MongoEventsController < CollectionApiController
       def index
         respond_with current_event_collection.mongo_events
       end

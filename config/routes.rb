@@ -8,7 +8,7 @@ Eventizer::Application.routes.draw do
 
   root to: "rails_admin/main#dashboard"
 
-  namespace :api, defaults: {format: 'json'} do
+  namespace :collection_api, defaults: {format: 'json'} do
     scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
       resources :projects, only: [] do
         resources :mongo_events, only: [:create, :index, :show, :destroy]

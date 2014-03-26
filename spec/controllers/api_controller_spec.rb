@@ -1,42 +1,42 @@
 require 'spec_helper'
 
-describe ApiController do
+describe CollectionApiController do
   before :all do
-    ApiController.send(:define_method, :create) do
+    CollectionApiController.send(:define_method, :create) do
       raise('I am executed')
     end
-    ApiController.send(:define_method, :show) do
-      raise('I am executed')
-    end
-
-    ApiController.send(:define_method, :index) do
+    CollectionApiController.send(:define_method, :show) do
       raise('I am executed')
     end
 
-    ApiController.send(:define_method, :update) do
+    CollectionApiController.send(:define_method, :index) do
       raise('I am executed')
     end
 
-    ApiController.send(:define_method, :delete) do
+    CollectionApiController.send(:define_method, :update) do
+      raise('I am executed')
+    end
+
+    CollectionApiController.send(:define_method, :delete) do
       raise('I am executed')
     end
 
     Rails.application.routes.draw do
-      match '/show', controller: 'api', action: 'create'
-      match '/show', controller: 'api', action: 'show'
-      match '/index', controller: 'api', action: 'index'
-      match '/update', controller: 'api', action: 'update'
-      match '/delete', controller: 'api', action: 'delete'
+      match '/show', controller: 'collection_api', action: 'create'
+      match '/show', controller: 'collection_api', action: 'show'
+      match '/index', controller: 'collection_api', action: 'index'
+      match '/update', controller: 'collection_api', action: 'update'
+      match '/delete', controller: 'collection_api', action: 'delete'
     end
   end
 
   after :all do
     require Rails.application.root.join('config/routes')
-    ApiController.send :remove_method, :create
-    ApiController.send :remove_method, :show
-    ApiController.send :remove_method, :index
-    ApiController.send :remove_method, :update
-    ApiController.send :remove_method, :delete
+    CollectionApiController.send :remove_method, :create
+    CollectionApiController.send :remove_method, :show
+    CollectionApiController.send :remove_method, :index
+    CollectionApiController.send :remove_method, :update
+    CollectionApiController.send :remove_method, :delete
   end
 
   describe "#current_user" do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::MongoEventsController do
+describe CollectionApi::V1::MongoEventsController do
   let(:user) { create(:user) }
   let(:project) { create(:project, user: user) }
   let(:event_collection) { create(:event_collection, name: 'my_event_collection', project: project) }
