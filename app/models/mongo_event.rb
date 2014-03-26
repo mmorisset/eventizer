@@ -3,7 +3,11 @@ class MongoEvent
   include Mongoid::Timestamps::Created
   include Mongoid::Serializable
   include MongoidAudit::History
+  include ElasticSearch::Searchable
+  include Eventizer::MongoEventIndex
+  include Elasticsearch::Model::Callbacks
 
+  index_name "mongo_events-#{Rails.env}"
 
   belongs_to :user, inverse_of: :mongo_events
 

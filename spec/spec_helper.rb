@@ -12,8 +12,11 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
 
   config.before :each do
+    MongoEvent.__elasticsearch__.client.indices.delete index: MongoEvent.index_name rescue nil
+    MongoEvent.__elasticsearch__.create_index! force: true rescue nil
     Mongoid.purge!
   end
+
   config.before(:all) { DeferredGarbageCollection.start }
   config.after(:all) { DeferredGarbageCollection.reconsider }
 end

@@ -17,6 +17,9 @@ gem "slim-rails"
 gem 'devise'
 gem 'rabl'
 gem 'strong_parameters'
+gem 'elasticsearch-model'
+gem 'elasticsearch-rails'
+gem 'gaston'
 
 
 # Gems used only for assets and not required
