@@ -16,6 +16,18 @@ Eventizer::Application.routes.draw do
     end
   end
 
+  namespace :analysing_api, defaults: {format: 'json'} do
+    scope module: :v1, constraints: ApiConstraints.new(version: 1, default: true) do
+      resources :projects, only: [] do
+        resources :mongo_events, only: [] do
+          collection do
+            get :count
+          end
+        end
+      end
+    end
+  end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

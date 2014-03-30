@@ -22,7 +22,7 @@ describe CollectionApiController do
     end
 
     Rails.application.routes.draw do
-      match '/show', controller: 'collection_api', action: 'create'
+      match '/create', controller: 'collection_api', action: 'create'
       match '/show', controller: 'collection_api', action: 'show'
       match '/index', controller: 'collection_api', action: 'index'
       match '/update', controller: 'collection_api', action: 'update'
@@ -47,17 +47,6 @@ describe CollectionApiController do
 
     it "should return an instance of the current user" do
       controller.current_user.should eq @current_user
-    end
-  end
-
-  describe "#current_authorization" do
-    before do
-      @current_authorization = create(:authorization)
-      controller.instance_variable_set :@current_authorization, @current_authorization
-    end
-
-    it "should return an instance of the current authorization" do
-      controller.current_authorization.should eq @current_authorization
     end
   end
 

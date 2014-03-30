@@ -22,7 +22,7 @@ describe CollectionApi::V1::MongoEventsController do
           event_collection: event_collection.name,
           mongo_event: {data: '{"action": "loaded asset", "time":["test", false, 3.5]}' }
         response.status.should eq 201 # :created
-        response.should render_template 'api/v1/mongo_events/create'
+        response.should render_template 'collection_api/v1/mongo_events/create'
         MongoEvent.first.tap do |mongo_event|
           expect(mongo_event.event_collection.name).to eq 'my_event_collection'
           expect(mongo_event.data['action']).to eq 'loaded asset'
@@ -37,7 +37,7 @@ describe CollectionApi::V1::MongoEventsController do
         event_collection: 'another_collection',
         mongo_event: { data: '{"action": "loaded asset", "time":["test", false, 3.5]}' }
         response.status.should eq 201 # :created
-        response.should render_template 'api/v1/mongo_events/create'
+        response.should render_template 'collection_api/v1/mongo_events/create'
         expect(EventCollection.count).to eq(1)
         MongoEvent.first.tap do |mongo_event|
           expect(mongo_event.event_collection.name).to eq 'another_collection'
@@ -52,7 +52,7 @@ describe CollectionApi::V1::MongoEventsController do
       get :index,
       project_id: project.id,
       event_collection: event_collection.name
-      response.should render_template 'api/v1/mongo_events/index'
+      response.should render_template 'collection_api/v1/mongo_events/index'
       response.status.should eq 200
     end
 
@@ -60,7 +60,7 @@ describe CollectionApi::V1::MongoEventsController do
       get :index,
         project_id: project.id,
         event_collection: 'another_collection'
-      response.should_not render_template 'api/v1/mongo_events/index'
+      response.should_not render_template 'collection_api/v1/mongo_events/index'
       response.status.should eq 404
     end
   end
@@ -71,7 +71,7 @@ describe CollectionApi::V1::MongoEventsController do
         project_id: project.id,
         event_collection: event_collection.name,
         id: mongo_event.id
-      response.should render_template 'api/v1/mongo_events/show'
+      response.should render_template 'collection_api/v1/mongo_events/show'
       response.status.should eq 200
     end
     it "return 404 not found when the collection is not found" do
@@ -79,7 +79,7 @@ describe CollectionApi::V1::MongoEventsController do
         project_id: project.id,
         event_collection: 'another_collection',
         id: mongo_event.id
-      response.should_not render_template 'api/v1/mongo_events/show'
+      response.should_not render_template 'collection_api/v1/mongo_events/show'
       response.status.should eq 404
     end
     it "return 404 not found when the mongo_event is not found" do
@@ -87,7 +87,7 @@ describe CollectionApi::V1::MongoEventsController do
         project_id: project.id,
         event_collection: event_collection.name,
         id: 'another_mongo_event'
-      response.should_not render_template 'api/v1/mongo_events/show'
+      response.should_not render_template 'collection_api/v1/mongo_events/show'
       response.status.should eq 404
     end
   end
@@ -98,7 +98,7 @@ describe CollectionApi::V1::MongoEventsController do
         project_id: project.id,
         event_collection: event_collection.name,
         id: mongo_event.id
-      response.should_not render_template 'api/v1/mongo_events/destroy'
+      response.should_not render_template 'collection_api/v1/mongo_events/destroy'
       response.status.should eq 204
       expect { mongo_event.reload }.to raise_error Mongoid::Errors::DocumentNotFound
     end
@@ -107,7 +107,7 @@ describe CollectionApi::V1::MongoEventsController do
         project_id: project.id,
         event_collection: 'another_collection',
         id: 'another_mongo_event'
-      response.should_not render_template 'api/v1/mongo_events/destroy'
+      response.should_not render_template 'collection_api/v1/mongo_events/destroy'
       response.status.should eq 404
     end
   end
