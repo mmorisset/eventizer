@@ -118,6 +118,9 @@ GEM
     hike (1.2.3)
     i18n (0.6.9)
     inflecto (0.0.2)
+    jbuilder (2.0.5)
+      activesupport (>= 3.0.0)
+      multi_json (>= 1.2.0)
     journey (1.0.4)
     jquery-rails (3.1.0)
       railties (>= 3.0, < 5.0)
@@ -317,6 +320,7 @@ DEPENDENCIES
   guard-bundler
   guard-cucumber
   guard-rspec
+  jbuilder
   jquery-rails
   json
   json_spec

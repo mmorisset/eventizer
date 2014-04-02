@@ -6,6 +6,7 @@ gem 'rails', '3.2.0'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'json'
+gem 'jbuilder'
 gem 'mongoid'
 gem 'rails_admin'
 gem 'mongoid-audit'
