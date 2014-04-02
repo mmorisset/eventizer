@@ -1,0 +1,7 @@
+:gaston:
+  :es:
+    :host: 'localhost:9200'
+
+:development:
+  :es:
+    :host: 'localhost:9200'

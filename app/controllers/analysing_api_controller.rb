@@ -8,9 +8,14 @@ class AnalysingApiController < ActionController::Base
   self.responder = CustomResponder
 
   before_filter :authenticate_user!
-  before_filter :authenticate_project!
+  before_filter :identify_project!
+  before_filter :identify_event_collection!
+  before_filter :create_event_finder!
 
   helper_method :current_user
+  helper_method :current_project
+  helper_method :current_event_collection
+  helper_method :current_event_finder
 
   def current_user
     @current_user
@@ -18,6 +23,14 @@ class AnalysingApiController < ActionController::Base
 
   def current_project
     @current_project
+  end
+
+  def current_event_collection
+    @current_event_collection
+  end
+
+  def current_event_finder
+    @current_event_finder
   end
 
   # https://github.com/aq1018/mongoid-history/issues/26
@@ -57,10 +70,19 @@ class AnalysingApiController < ActionController::Base
       end
     end
 
-    def authenticate_project!
+    def identify_project!
       unless @current_project = @current_user.projects.find(params.require(:project_id))
-        respond_with({ error: "Unrecognized User Authorization: Access denied" }, status: :not_found, location: nil, template: nil)
         return false
       end
+    end
+
+    def identify_event_collection!
+      unless @current_event_collection = @current_project.event_collections.find_by(name: params.require(:event_collection))
+        return false
+      end
+    end
+
+    def create_event_finder!
+      @current_event_finder = EventFinder.new(@current_project, @current_event_collection)
     end
 end

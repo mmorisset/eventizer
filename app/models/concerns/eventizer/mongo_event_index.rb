@@ -47,7 +47,7 @@ module Eventizer::MongoEventIndex
         indexes :id,                  type: :string, index: :not_analyzed
         indexes :event_collection,    type: :string, analyzer: :normalized
         indexes :event_collection_id, type: :string, index: :not_analyzed
-        indexes :user_id,             type: :string, index: :not_analyzed
+        indexes :project_id,          type: :string, index: :not_analyzed
         indexes :created_at,          type: 'date', include_in_all: false
         indexes :data,                type: :object, index: :not_analyzed
 
@@ -56,15 +56,17 @@ module Eventizer::MongoEventIndex
 
     def to_hash
       {
-        id:               self.id.to_s,
-        event_collection: self.event_collection.name,
-        user_id:          self.event_collection.project_id.to_s,
-        created_at:       self.created_at,
-        data:             self.data,
+        id:                   self.id.to_s,
+        event_collection:     self.event_collection.name,
+        event_collection_id:  self.event_collection.id,
+        project_id:           self.event_collection.project_id.to_s,
+        created_at:           self.created_at,
+        data:                 self.data
       }
     end
 
     def as_indexed_json(options={})
+      'p index bitch !!!'
       self.to_hash.to_json
     end
   end

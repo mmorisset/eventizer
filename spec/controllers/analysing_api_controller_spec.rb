@@ -1,42 +1,19 @@
 require 'spec_helper'
 
-describe CollectionApiController do
+describe AnalysingApiController do
   before :all do
-    CollectionApiController.send(:define_method, :create) do
-      raise('I am executed')
-    end
-    CollectionApiController.send(:define_method, :show) do
-      raise('I am executed')
-    end
-
-    CollectionApiController.send(:define_method, :index) do
-      raise('I am executed')
-    end
-
-    CollectionApiController.send(:define_method, :update) do
-      raise('I am executed')
-    end
-
-    CollectionApiController.send(:define_method, :delete) do
+    AnalysingApiController.send(:define_method, :show) do
       raise('I am executed')
     end
 
     Rails.application.routes.draw do
-      match '/create', controller: 'collection_api', action: 'create'
-      match '/show', controller: 'collection_api', action: 'show'
-      match '/index', controller: 'collection_api', action: 'index'
-      match '/update', controller: 'collection_api', action: 'update'
-      match '/delete', controller: 'collection_api', action: 'delete'
+      match '/show', controller: 'analysing_api', action: 'show'
     end
   end
 
   after :all do
     require Rails.application.root.join('config/routes')
-    CollectionApiController.send :remove_method, :create
-    CollectionApiController.send :remove_method, :show
-    CollectionApiController.send :remove_method, :index
-    CollectionApiController.send :remove_method, :update
-    CollectionApiController.send :remove_method, :delete
+    AnalysingApiController.send :remove_method, :show
   end
 
   describe "#current_user" do
@@ -61,6 +38,17 @@ describe CollectionApiController do
     end
   end
 
+  describe "#current_event_collection" do
+    before do
+      @current_event_collection = create(:event_collection)
+      controller.instance_variable_set :@current_event_collection, @current_event_collection
+    end
+
+    it "should return an instance of the current user" do
+      controller.current_event_collection.should eq @current_event_collection
+    end
+  end
+
   describe '#authenticate_user!' do
     it 'sends back a 400 \'Required parameter missing: secret\' if user secret is missing when requested' do
       get :show
@@ -75,7 +63,7 @@ describe CollectionApiController do
     end
   end
 
-  describe '#authenticate_project!' do
+  describe '#identify_project!' do
 
     let(:user) { create(:user) }
     let(:project) { create(:project, user: user) }
@@ -95,6 +83,58 @@ describe CollectionApiController do
     it 'sends back a 404 \'Unrecognized Project: Access denied\' if project cannot be found' do
       get :show, { project_id: 'invalid-project' }
       response.status.should eq 404
+    end
+  end
+
+
+  describe '#identify_event_collection!' do
+
+    let(:user) { create(:user) }
+    let(:project) { create(:project, user: user) }
+    let(:event_collection) { create(:event_collection, project: project) }
+
+    before do
+      controller.stub(:authenticate_user!) { true }
+      controller.stub(:authorize_access!) { true }
+      controller.stub(:identify_project!) { true }
+      controller.instance_variable_set :@current_user, user
+      controller.instance_variable_set :@current_project, project
+    end
+
+    it 'sends back a 400 \'Required parameter missing: event_collection\' if event_collection is missing when requested' do
+      get :show
+      response.body.should include "Required parameter missing: event_collection"
+      response.status.should eq 400
+    end
+
+    it 'sends back a 404 \'Unrecognized EventCollection: Access denied\' if event_collection cannot be found' do
+      get :show, { event_collection: 'invalid-event_collection' }
+      response.status.should eq 404
+    end
+  end
+
+  describe '#create_event_finder!' do
+
+    let(:user) { create(:user) }
+    let(:project) { create(:project, user: user) }
+    let(:event_collection) { create(:event_collection, project: project) }
+
+    before do
+      controller.stub(:authenticate_user!) { true }
+      controller.stub(:authorize_access!) { true }
+      controller.stub(:identify_project!) { true }
+      controller.stub(:identify_event_collection!) { true }
+      controller.instance_variable_set :@current_user, user
+      controller.instance_variable_set :@current_project, project
+      controller.instance_variable_set :@current_event_collection, event_collection
+    end
+
+    it 'creates the event finder' do
+      expect { get :show }.to raise_error 'I am executed'
+      controller.current_event_finder.should_not be_nil
+      controller.current_event_finder.project.should eq project
+      controller.current_event_finder.event_collection.should eq event_collection
+
     end
   end
 end

@@ -22,6 +22,12 @@ end
 
 module Eventizer
   class Application < Rails::Application
+
+    Gaston.configure do |gaston|
+      gaston.env = Rails.env
+      gaston.files = Dir[Rails.root.join("config/gaston/**/*.yml")]
+    end
+
     config.api_only = true # load full Middleware stack
 
     # Custom directories with classes and modules you want to be autoloadable.
