@@ -36,6 +36,7 @@ module Eventizer
       #{config.root}/app/controllers/concerns
       #{config.root}/app/models/concerns
       #{config.root}/lib
+      #{config.root}/lib/eventizer
     )
 
     # Configure the default encoding used in templates for Ruby 1.9.

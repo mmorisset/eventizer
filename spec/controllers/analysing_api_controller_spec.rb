@@ -130,11 +130,11 @@ describe AnalysingApiController do
     end
 
     it 'creates the event finder' do
-      expect { get :show }.to raise_error 'I am executed'
+      expect { get :show, { timeframe: 'last week' } }.to raise_error 'I am executed'
       controller.current_event_finder.should_not be_nil
       controller.current_event_finder.project.should eq project
       controller.current_event_finder.event_collection.should eq event_collection
-
+      controller.current_event_finder.timeframe.should eq 'last week'
     end
   end
 end

@@ -83,6 +83,6 @@ class AnalysingApiController < ActionController::Base
     end
 
     def create_event_finder!
-      @current_event_finder = EventFinder.new(@current_project, @current_event_collection)
+      @current_event_finder = EventFinder.new(@current_project, @current_event_collection, params[:filters], params[:timeframe], params[:interval])
     end
 end
